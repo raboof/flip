@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <style>
+      .frame {
+        float: left;
+      }
+      .frame img {
+        width: 70%;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="jquery-2.2.3.min.js"></script>
+    <script src="webcam.js"></script>
+
+    <div id="my_camera" style="float: left; width:320px; height:240px;"></div>
+    <div id="controls">
+        <form>
+            Total frames: <input id="frames" type="number" value="30"><br>
+            Frames per row: <input id="framesperrow" type="number" value="10"><br>
+            Frame rate: <input id="rate" type="number" value="350">
+        </form>
+    </div>
+    <div style="clear: both">
+    <div id="my_result"></div>
+
+    <script language="JavaScript">
+        Webcam.attach('#my_camera');
+
+        function make_movie() {
+            $('#make').hide();
+            $('#my_camera').show();
+            record_movie(1)
+        }
+
+        function record_movie(frame) {
+            var width = 100 / $('#framesperrow').val();
+            Webcam.snap(function(data_uri) {
+                $('#my_result').append(
+                  '<div style="width: '+width+'%" class="frame">'+frame+'<img src="'+data_uri+'"/></div>');
+            } );
+            if (frame < $('#frames').val()) {
+                window.setTimeout(record_movie, $('#rate').val(), frame + 1);
+            } else {
+                $('#my_camera').hide();
+                $('#controls').hide();
+                $('#make').hide();
+                $('#show').show();
+            }
+        }
+
+        function show_controls() {
+            $('#my_camera').show();
+            $('#controls').show();
+            $('#make').show();
+            $('#show').hide();
+            $('#my_result').empty();
+        }
+
+    </script>
+    <div style="clear: both">
+    <a id="make" href="javascript:void(make_movie())">Make movie!</a>
+    <a id="show" style="display: none" href="javascript:void(show_controls())">Another one!</a>
+  </body>
+</html>
