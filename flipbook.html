@@ -7,6 +7,9 @@
       .frame img {
         width: 70%;
       }
+      #my_result {
+        width: 100%;
+      }
     </style>
   </head>
   <body>
@@ -17,12 +20,12 @@
     <div id="controls">
         <form>
             Total frames: <input id="frames" type="number" value="30"><br>
-            Frames per row: <input id="framesperrow" type="number" value="10"><br>
+            Frames per row: <input id="framesperrow" type="number" value="6"><br>
             Frame rate: <input id="rate" type="number" value="350">
         </form>
     </div>
     <div style="clear: both">
-    <div id="my_result"></div>
+    <table id="my_result"></table>
 
     <script language="JavaScript">
         Webcam.attach('#my_camera');
@@ -30,16 +33,20 @@
         function make_movie() {
             $('#make').hide();
             $('#my_camera').show();
-            record_movie(1)
+            record_movie(0)
         }
 
         function record_movie(frame) {
-            var width = 100 / $('#framesperrow').val();
+            //var width = 100 / $('#framesperrow').val();
             Webcam.snap(function(data_uri) {
-                $('#my_result').append(
-                  '<div style="width: '+width+'%" class="frame">'+frame+'<img src="'+data_uri+'"/></div>');
+                if (frame % $('#framesperrow').val() == 0) {
+                    $('#my_result').append('<tr></tr>');
+                }
+                $('#my_result tr:last').append(
+                  '<td>'+frame+'</td><td><img width="100%" src="'+data_uri+'"/></td>'
+                );
             } );
-            if (frame < $('#frames').val()) {
+            if (frame < $('#frames').val() - 1) {
                 window.setTimeout(record_movie, $('#rate').val(), frame + 1);
             } else {
                 $('#my_camera').hide();
