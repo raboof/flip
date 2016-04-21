@@ -4,4 +4,10 @@
 * print it
 * cut out the frames and create a flipbook!
 
-Demo: http://arnout.engelen.eu/flip
+## Acknowledgements
+
+* https://github.com/jhuckaby/webcamjs
+
+## Demo
+
+https://arnout.engelen.eu/flip
